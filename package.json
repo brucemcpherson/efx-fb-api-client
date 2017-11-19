@@ -1,0 +1,48 @@
+{
+  "name": "effex-api-client",
+  "version": "2.2.1",
+  "description": "JavaScript client for Ephemeral Exchange",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "babel src --out-dir dist && browserify ./dist/effex-api-client-cdn.js | uglifyjs > ./cdn/effex-api-client-v2.2.min.js",
+    "prepublish": "npm run build",
+    "test": "babel src --out-dir dist && mocha --timeout 15000 --bail",
+    "small": "babel detail/small.js -o detail/s.js",
+    "tiny": "babel detail/tiny.js -o detail/t.js"
+  },
+  "author": "Bruce Mcpherson <bruce@mcpher.com> (http://ramblings.mcpher.com)",
+  "license": "MIT",
+  "keywords": [
+    "api",
+    "ephemeral exchange",
+    "cache",
+    "effex",
+    "firestore"
+  ],
+  "dependencies": {  
+    "axios": "^0.15.3",
+    "firebase": "^4.6.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brucemcpherson/effex-api-client"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-es2015": "^6.24.0",
+    "browserify": "^14.1.0",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "uglify": "^0.1.5"
+  },
+  "babel": {
+    "plugins": [
+      "babel-plugin-transform-object-rest-spread"
+    ],
+    "presets": [
+      "babel-preset-es2015"
+    ],
+    "ignore": []
+  }
+}

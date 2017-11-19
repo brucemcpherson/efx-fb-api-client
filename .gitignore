@@ -1,0 +1,5 @@
+detail
+node_modules
+dist
+test
+src/lib/config.js
