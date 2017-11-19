@@ -170,7 +170,7 @@ Here is a list of the parameters that the API understands and where they can be 
 Sets the API base url. Note that this is likely to change or be removed as the service moves from beta. It's unlikely you would need to use this anyway, as it already defaults to the production API. 
 
 ```
-efx.setBase("https://efxapi.com");
+efx.setBase("https://efxapi.com/v2");
 ```
 ### ping ()
 
