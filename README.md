@@ -22,8 +22,15 @@ var efx = require ('effex-api-client');
 
 If you are including the library with a script tag
 
+specific version
+
 ```
-<script src="https://efxapi.com/scripts/effex-api-client-v2.2.min.js"></script>
+<script src="https://efxapi.com/scripts/effex-api-client-v2.3.min.js"></script>
+```
+latest version
+
+```
+<script src="https://efxapi.com/scripts/efx.min.js"></script>
 ```
 Then in your code
 ```
