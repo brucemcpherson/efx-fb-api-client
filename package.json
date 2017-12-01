@@ -1,10 +1,10 @@
 {
   "name": "effex-api-client",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "JavaScript client for Ephemeral Exchange",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "babel src --out-dir dist && browserify ./dist/effex-api-client-cdn.js | uglifyjs > ./cdn/effex-api-client-v2.2.min.js",
+    "build": "babel src --out-dir dist && browserify ./dist/effex-api-client-cdn.js | uglifyjs > ./cdn/effex-api-client-v2.3.min.js && cp ./cdn/effex-api-client-v2.3.min.js ./cdn/efx.min.js",
     "prepublish": "npm run build",
     "test": "babel src --out-dir dist && mocha --timeout 15000 --bail",
     "small": "babel detail/small.js -o detail/s.js",

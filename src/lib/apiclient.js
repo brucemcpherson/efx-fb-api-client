@@ -658,7 +658,7 @@ var api = (function(ns) {
 
     params = params || {};
     let since = params.since || watch.options.start || 0;
-    console.log ("starting pull from ",since,  watch.watchable);
+
 
     // this is  recursive
     function p() {
@@ -909,29 +909,63 @@ var api = (function(ns) {
     return ax.get(`/validate/${coupon}`);
   };
 
-  /**
-   * @param {string} accountId the account id
-   * @param {string} authid the authid - the authid i
-   * @param {boolean} active whether active
-   * @return {Promise} to the result
-   */
-  ns.registerAccount = function(accountId, authId, active) {
-    return ax.post(`/admin/register/${accountId}${makeAdmin()}`, {
-      data: {
-        authid: authId,
-        active: active
-      }
-    });
-  };
-
 
   /**
+   * @param {string} authId the fb auth id
+   * @return {Promise} to the result
+   */
+  ns.createProfile = function(authId) {
+    return ax.put(`/admin/profile${makeAdmin({authid:authId})}`);
+  };
+  
+  /**
+   * @param {string} authId the fb auth id
+   * @return {Promise} to the result
+   */
+  ns.getProfile = function(authId) {
+    return ax.get(`/admin/profile${makeAdmin({authid:authId})}`);
+  };
+  
+  /**
+   * @param {string} authId the fb auth id
+   * @return {Promise} to the result
+   */
+  ns.removeProfile = function(authId) {
+    return ax.delete(`/admin/profile${makeAdmin({authid:authId})}`);
+  };
+  
+  /**
+   * @param {string} authId the fb auth id
+   * @return {Promise} to the result
+   */
+  ns.getAccount = function(accountId, authId) {
+    return ax.get(`/admin/account/${accountId}${makeAdmin({authid:authId})}`);
+  };
+  
+  /**
+   * @param {string} authId the fb auth id
+   * @return {Promise} to the result
+   */
+  ns.updateAccount = function(accountId, authId, active) {
+    return ax.put(`/admin/account/${accountId}${makeAdmin({authid:authId,active:active ? 1 : 0})}`);
+  };
+  
+  /**
+   * @param {string} authId the fb auth id
+   * @return {Promise} to the result
+   */
+  ns.addAccount = function(authId) {
+    return ax.put(`/admin/account${makeAdmin({authid:authId})}`);
+  };
+
+  /**
    * @param {string} accountId the account id
    * @return {Promise} to the result
    */
-  ns.removeAccount = function(accountId) {
-    return ax.delete(`/admin/remove/${accountId}${makeAdmin()}`);
+  ns.removeAccount = function(accountId,authId) {
+    return ax.delete(`/admin/account/${accountId}${makeAdmin({authid:authId})}`);
   };
+
 
   /**
    * @param {string} accountId the account id

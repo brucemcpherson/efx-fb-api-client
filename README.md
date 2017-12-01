@@ -79,9 +79,9 @@ All access keys and items are associated with a specific account and will be imm
 This is a public store, and there is no authentication required. However, keys are required for all data accesses, and both the data and its keys are encrypted in the store. You may also choose to further encrypt it before sending it to the store too. In any case, to ensure you comply with your country's privacy laws on the storage of personally identifiable data, don't do it. 
 
 # Client API SDK for Node and JavaScript
-The API has a simple HTTP REST API - take the tutorial to see the structure of each call if you want to write your own client.  The tutoral is part of the API console, which you can find at https://storage.googleapis.com/effex-console-static/bundle/index.html#/.  The console also has a JSON editor and viewer to allow you to directly access data in the store. You can even use a browser to access the store if you want - handy for debugging.
+The API has a simple HTTP REST API - take the tutorial to see the structure of each call if you want to write your own client.  The tutoral is part of the API console, which you can find at https://efxapi.com.  The console also has a JSON editor and viewer to allow you to directly access data in the store. You can even use a browser to access the store if you want - handy for debugging.
 
-For convenience this node/JavaScript client is available, and of course you can use it in a web app too. There are other platform clients available too. For details see the consolidated repo. https://github.com/brucemcpherson/effex
+For convenience this node/JavaScript client is available, and of course you can use it in a web app too. There are other platform clients available too. 
 
 ## Initialization 
 

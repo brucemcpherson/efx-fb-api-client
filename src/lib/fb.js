@@ -78,7 +78,7 @@ module.exports = (ns => {
 
   // set listener for a specific key
   ns.setOn = (collection, doc, func) => {
-    console.log ("setting on for ", collection,doc);
+    
     return ns.ref(collection, doc).then(ref => {
       ref.on('value', doc => {
         const exists = doc.val() ? true : false;
