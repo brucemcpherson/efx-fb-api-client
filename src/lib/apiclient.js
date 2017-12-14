@@ -108,7 +108,7 @@ var api = (function(ns) {
   };
 
   // set the default environment
-  ns.setEnv('fb');
+  ns.setEnv('prod');
 
   /**
    * handy if running as browser client
@@ -435,10 +435,8 @@ var api = (function(ns) {
         return fb.setOn("uqs", watch.options.uq ,(pack => {
 
           // this will get called if there;s a change
-          
           if (!pack.ok) {
-            console.log ("detected change with no data",watch.options.uq);
-            return Promise.resolve (null);
+            console.log (".. detected change with no data - probably new item", watch.options.uq);
           }    
           //TODO something with the params.since
           // and pack.value;             
@@ -453,9 +451,8 @@ var api = (function(ns) {
 
               if (!w.data.ok) {
                 // should always work
-                // dont know what else to do at this point except fail
-                // since it'll be in the callback function
-                throw 'failed to get watchable item ' + JSON.stringify(w.data);
+                console.error ("didnt get watchable ", w.data);
+                return Promise.reject (w.data);
               }
                       
               // we have a watch result to report
@@ -465,13 +462,19 @@ var api = (function(ns) {
                 // execute the user callback, passing the 
                 // contents of the sx
                 callback(result.data.watchable, p);
+                
+                // need to think about what this is returning to where
+                return p;
               }
                       
             })
             .catch (err=> {
               throw 'failed to getwatchable ' + result.data.watchable + ' ' +err;
             });
-        }));
+        }))
+        .then (fon=> {
+          return watch;
+        });
 
       }
       
@@ -494,155 +497,6 @@ var api = (function(ns) {
     });  
     
   };
-    
-
-   
-  ns.xxon = function(event, id, key, callback, options, params) {
-
-    // set up default watch parameters
-    var pack = defWatchParams_(callback, options);
-    if (!pack.data.ok) {
-      return Promise.reject(pack);
-    }
-    var watch = pack.data.value;
-    watch.event = event;
-
-    // this is how we'll refer to this watch during push connections
-    watch.options.uq = Math.round(Math.random() * 2048).toString(32) + new Date().getTime().toString(32);
-
-    // the true id doesnt actually exist until we've had
-    // a successful conversation with the server
-    // this is a nique id till that happens, ot for pull types that dont use the server
-    watch.watchable = watch.options.uq;
-
-    // we'll always need an on
-
-    // initiate the watcher
-    return new Promise((resolve, reject) => {
-      try {
-
-        switch (watch.options.type) {
-
-          case 'push':
-
-            // actually no need to login, but may change for a different db later
-            Promise.resolve()
-              
-              .then((uid) => {
-                // register a push watch entry
-                return ns.onRegister(id, key, event, watch.options, params);
-              })
-              
-              // set up the watcher
-              .then(result => {
-
-                watch.watchable = result.data.watchable;
-                
-                if (!result.data.ok) {
-                  reject(result.data);
-                }
-                
-                else {
-
-                  // what to do when one is noted
-                  fb.setOn("uqs", watch.options.uq ,(value => {
-
-                    // the push db only contains the latestObservation
-                    // so first get the actual watchable data
-                    // note that the uq database, which is public only has the uq key
-                    // a once off value creaated at the time of the push request
-                    // so its not possible to track back to the watchable
-                    // and thus the data except from here.
-                    ns.getWatchable(result.data.watchable, key)
-                      // then callback saying we have it
-                      .then(w => {
-                       //TODO something with the params.since
-                        if (!w.data.ok) {
-                          // should always work
-                          // dont know what else to do at this point except fail
-                          // since it'll be in the callback function
-                          throw 'failed to get watchable item ' + JSON.stringify(w.data);
-                        }
-                      
-                        // we have a watch result to report
-                        else {
-                          var p = w.data.value;
-                          // execute the user callback, passing the 
-                          // contents of the sx
-                          callback(result.data.watchable, p);
-                        }
-                      
-                      })
-                      .catch (err=> {
-                        throw 'failed to getwatchable ' + result.data.watchable + ' ' +err;
-                      });
-                  }));
-
-                  // add to list of whats being watched
-                  watch.watchable = result.data.watchable;
-                  ns.watching[watch.watchable] = watch;
-                  resolve(watch);
-                }
-
-              })
-              .catch((err) => {
-                reject(err);
-              });
-
-            break;
-
-          case 'url':
-            ns.onRegister(id, key, event, watch.options, params)
-            .then(function (result) {
-              watch.watchable = result.data.watchable;
-              ns.watching[watch.watchable] = watch;
-              if (!result.data.ok) {
-                reject(result.data);
-              }
-              else {
-                resolve(watch);
-              }
-            }).catch(function (err) {
-              return reject(err);
-            });
-            break;
-
-          case 'pull':
-            // need to register an on so that events get generated in the first place
-            ns.onRegister(id, key, event, watch.options, params)
-              .then(function (result) {
-                watch.watchable = result.data.watchable;
-                ns.watching[watch.watchable] = watch;
-                if (!result.data.ok) {
-                  reject(result.data);
-                }
-                else {
-                  doPull_(key, watch, params);
-                  resolve(watch);
-                }
-              }).catch(function (err) {
-                return reject(err);
-              });
-
-            break;
-
-          default:
-            reject({
-              ok: false,
-              code: 500,
-              error: "impossible watch type",
-              value: watch
-            });
-
-        }
-      }
-      catch (err) {
-        reject(err);
-      }
-    });
-
-  };
-
 
 
   /**

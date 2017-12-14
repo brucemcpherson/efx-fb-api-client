@@ -77,10 +77,12 @@ module.exports = (ns => {
   };
 
   // set listener for a specific key
-  ns.setOn = (collection, doc, func) => {
+  ns.setOn = (collection, docr, func) => {
     
-    return ns.ref(collection, doc).then(ref => {
+    return ns.ref(collection, docr).then(ref => {
+      
       ref.on('value', doc => {
+       
         const exists = doc.val() ? true : false;
         const data = exists ? doc.val() : null;
         return func({

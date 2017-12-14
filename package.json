@@ -1,6 +1,6 @@
 {
   "name": "effex-api-client",
-  "version": "2.3.0",
+  "version": "2.3.3",
   "description": "JavaScript client for Ephemeral Exchange",
   "main": "./dist/index.js",
   "scripts": {
